@@ -9,7 +9,7 @@ import path from 'path';
 dotenv.config();
 
 mongoose
-  .connect(process.env.MONGO)
+  .connect("mongodb+srv://deekshabhardwaj1267:deeksha@cluster0.0guuyuf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",{useNewUrlParser:true})
   .then(() => {
     console.log('Connected to MongoDB!');
   })
@@ -17,7 +17,8 @@ mongoose
     console.log(err);
   });
 
-  const __dirname = path.resolve();
+const __dirname = path.resolve();
+console.log(__dirname);
 
 const app = express();
 
@@ -33,12 +34,18 @@ app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 
+app.use((req, res, next) => {
+  if (req.url.endsWith('.jsx')) {
+    res.type('application/javascript');
+  }
+  next();
+});
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-})
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

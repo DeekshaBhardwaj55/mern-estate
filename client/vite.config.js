@@ -13,4 +13,8 @@ export default defineConfig({
   },
 
   plugins: [react()],
+  esbuild: {
+    jsxFactory: 'React.createElement',
+    jsxFragment: 'React.Fragment'
+  }
 });
